@@ -19,7 +19,7 @@ class TransactionResource extends JsonResource
             'asset_id' => $this->asset_id,
             'date' => $this->date,
             'type' => $this->type,
-            'value' => $this->value,
+            'value' => floatval($this->value),
             'asset_total_value' => $this->asset_total_value,
         ];
     }

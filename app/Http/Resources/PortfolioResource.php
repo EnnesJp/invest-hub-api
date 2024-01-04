@@ -17,7 +17,7 @@ class PortfolioResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'balance' => $this->balance,
+            'balance' => floatval($this->balance),
         ];
     }
 }

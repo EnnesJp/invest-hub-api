@@ -13,6 +13,7 @@ use App\Models\Asset;
 use App\Repositories\AssetRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use LDAP\Result;
 use Symfony\Component\HttpFoundation\Response;
 
 class AssetController extends Controller
@@ -26,12 +27,20 @@ class AssetController extends Controller
                     ->user()
                     ->assets()
                     ->latest()
-                    ->pagination($request->per_page, $request->page);
+                    ->paginate($request->per_page ?? 20);
+
+        $meta = [
+            'page_size' => $assets->perPage(),
+            'current_page' => $assets->currentPage(),
+            'total_pages' => $assets->lastPage(),
+            'total_count' => $assets->total(),
+        ];
 
         return $this->success(
-            $assets,
+            AssetResource::collection($assets),
             null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
+            $meta
         );
     }
 

@@ -26,12 +26,20 @@ class TransactionController extends Controller
                         ->user()
                         ->transactions()
                         ->latest()
-                        ->pagination($request->per_page, $request->page);
+                        ->paginate($request->per_page ?? 20);
+
+        $meta = [
+            'page_size' => $transactions->perPage(),
+            'current_page' => $transactions->currentPage(),
+            'total_pages' => $transactions->lastPage(),
+            'total_count' => $transactions->total(),
+        ];
 
         return $this->success(
-            $transactions,
+            TransactionResource::collection($transactions),
             null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
+            $meta
         );
     }
 

@@ -24,14 +24,22 @@ class PortfolioController extends Controller
     {
         $portfolios = auth()
                         ->user()
-                        ->portfolio()
+                        ->portfolios()
                         ->latest()
-                        ->pagination($request->per_page, $request->page);
+                        ->paginate($request->per_page ?? 20);
+
+        $meta = [
+            'page_size' => $portfolios->perPage(),
+            'current_page' => $portfolios->currentPage(),
+            'total_pages' => $portfolios->lastPage(),
+            'total_count' => $portfolios->total(),
+        ];
 
         return $this->success(
             PortfolioResource::collection($portfolios),
             null,
-            Response::HTTP_OK
+            Response::HTTP_OK,
+            $meta
         );
     }
 
