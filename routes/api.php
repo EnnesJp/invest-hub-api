@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\PortfolioController;
+use App\Http\Controllers\Api\AssetController;
+use App\Http\Controllers\Api\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +23,8 @@ Route::post('register', RegisterController::class);
 
 Route::group(['middleware' => 'api.auth'], function () {
     Route::get('logout', [LoginController::class, 'logout']);
+
+    Route::apiResource('portfolios', PortfolioController::class);
+    Route::apiResource('assets', AssetController::class);
+    Route::apiResource('transactions', TransactionController::class);
 });

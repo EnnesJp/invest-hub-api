@@ -43,4 +43,9 @@ class Asset extends Model
     {
         return $query->where('user_id', auth()->id());
     }
+
+    public function scopeForPortfolio(Builder $query, $portfolioId): Builder
+    {
+        return $query->where('portfolio_id', $portfolioId);
+    }
 }
