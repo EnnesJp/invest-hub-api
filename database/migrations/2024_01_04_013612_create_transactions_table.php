@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Asset::class);
-            $table->timestamp('date')->nullable();
+            $table->date('date')->nullable();
             $table->enum('type', ['debit', 'credit']);
             $table->decimal('value', 8, 2);
             $table->decimal('asset_total_value', 8, 2);

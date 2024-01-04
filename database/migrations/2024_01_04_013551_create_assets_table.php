@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Portfolio::class);
             $table->string('name');
             $table->decimal('value', 8, 2);
-            $table->timestamp('acquisition_date')->nullable();
+            $table->date('acquisition_date')->nullable();
             $table->timestamps();
         });
     }
