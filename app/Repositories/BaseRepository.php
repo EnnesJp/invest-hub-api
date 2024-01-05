@@ -9,6 +9,6 @@ abstract class BaseRepository
 
     abstract public function create(array $attributes);
     abstract public function update($model, array $attributes);
-    abstract public function forceDelete($model);
+    abstract public function delete($model, bool $cascade = false);
 
 }

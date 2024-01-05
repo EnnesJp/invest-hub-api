@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function destroy(User $user, UserRepository $repository): JsonResponse
     {
-        $deleted = $repository->forceDelete($user);
+        $deleted = $repository->delete($user);
 
         return $this->success(UserConstants::DESTROY);
     }

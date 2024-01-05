@@ -45,7 +45,7 @@ class UserRepository extends BaseRepository
     /**
      * @param User $user
      */
-    public function forceDelete($user): mixed
+    public function delete($user, bool $force = false): mixed
     {
         return DB::transaction(function () use ($user) {
             $deleted = $user->forceDelete();

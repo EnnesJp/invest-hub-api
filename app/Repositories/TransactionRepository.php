@@ -86,8 +86,8 @@ class TransactionRepository extends BaseRepository
     public function reversalTotalValue(string $type, float $assetValue, float $transactionValue): mixed
     {
         return $type === TransactionConstants::CREDIT
-            ? $transactionValue - $assetValue
-            : $transactionValue + $assetValue;
+            ? $assetValue - $transactionValue
+            : $assetValue + $transactionValue;
     }
 
     public function getTotalValue(string $type, float $assetValue, float $transactionValue)
@@ -100,22 +100,24 @@ class TransactionRepository extends BaseRepository
     /**
      * @param Transaction $transaction
      */
-    public function forceDelete($transaction): mixed
+    public function delete($transaction, bool $cascade = false): mixed
     {
-        return DB::transaction(function () use($transaction) {
-            $assetId = $transaction->asset_id;
-            $asset = auth()->user()->assets()->find($assetId);
-            $type = $transaction->type;
-            $value = $transaction->value;
-            $newAssetValue = $this->reversalTotalValue(
-                $type,
-                $asset->value,
-                $value
-            );
+        return DB::transaction(function () use($transaction, $cascade) {
+            if (!$cascade) {
+                $assetId = $transaction->asset_id;
+                $asset = auth()->user()->assets()->find($assetId);
+                $type = $transaction->type;
+                $value = $transaction->value;
+                $newAssetValue = $this->reversalTotalValue(
+                    $type,
+                    $asset->value,
+                    $value
+                );
 
-            (new AssetRepository)->update($asset, [
-                'value' => $newAssetValue
-            ]);
+                (new AssetRepository)->update($asset, [
+                    'value' => $newAssetValue
+                ]);
+            }
 
             $deleted = $transaction->forceDelete();
 

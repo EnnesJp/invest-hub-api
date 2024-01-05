@@ -60,13 +60,14 @@ class TransactionController extends Controller
 
     public function update(
         TransactionRequest $request,
-        Transaction $transaction
+        Transaction $transaction,
+        TransactionRepository $repository
     ): JsonResponse {
         if (!$this->canAccess($transaction)) {
             return $this->error([], AuthConstants::PERMISSION);
         }
 
-        $transaction->update($request->all());
+        $repository->update($transaction, $request->all());
 
         return $this->success(
             new TransactionResource($transaction),
@@ -74,17 +75,19 @@ class TransactionController extends Controller
         );
     }
 
-    public function destroy(Transaction $transaction): JsonResponse
-    {
+    public function destroy(
+        Transaction $transaction,
+        TransactionRepository $repository
+    ): JsonResponse {
         if (!$this->canAccess($transaction)) {
             return $this->error([], AuthConstants::PERMISSION);
         }
 
-        $transaction->delete();
+        $repository->delete($transaction);
 
         return $this->success(
             new TransactionResource($transaction),
-            TransactionConstants::DELETE
+            TransactionConstants::DESTROY
         );
     }
 }

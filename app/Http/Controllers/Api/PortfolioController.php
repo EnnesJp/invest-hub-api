@@ -76,13 +76,15 @@ class PortfolioController extends Controller
         );
     }
 
-    public function destroy(Portfolio $portfolio, PortfolioRepository $repository): JsonResponse
-    {
+    public function destroy(
+        Portfolio $portfolio,
+        PortfolioRepository $repository
+    ): JsonResponse {
         if (!$this->canAccess($portfolio)) {
             return $this->error([], AuthConstants::PERMISSION);
         }
 
-        $repository->forceDelete($portfolio);
+        $repository->delete($portfolio);
 
         return $this->success([], PortfolioConstants::DESTROY);
     }

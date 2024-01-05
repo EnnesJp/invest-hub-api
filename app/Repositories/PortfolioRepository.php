@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Exceptions\GeneralJsonException;
+use App\Models\Asset;
 use App\Models\Portfolio;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 class PortfolioRepository extends BaseRepository
@@ -44,14 +46,22 @@ class PortfolioRepository extends BaseRepository
     /**
      * @param Portfolio $portfolio
      */
-    public function forceDelete($portfolio): mixed
+    public function delete($portfolio, bool $cascade = false): mixed
     {
         return DB::transaction(function () use($portfolio) {
+            $this->removeAssets($portfolio);
             $deleted = $portfolio->forceDelete();
 
             throw_if(!$deleted, GeneralJsonException::class, "cannot delete portfolio.");
 
             return $deleted;
+        });
+    }
+
+    public function removeAssets(Portfolio $portfolio): void
+    {
+        $portfolio->assets->each(function (Asset $asset){
+            (new AssetRepository)->delete($asset, true);
         });
     }
 }

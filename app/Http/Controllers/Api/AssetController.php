@@ -75,13 +75,15 @@ class AssetController extends Controller
         );
     }
 
-    public function destroy(Asset $asset, AssetRepository $repository): JsonResponse
-    {
+    public function destroy(
+        Asset $asset,
+        AssetRepository $repository
+    ): JsonResponse {
         if (!$this->canAccess($asset)) {
             return $this->error([], AuthConstants::PERMISSION);
         }
 
-        $repository->forceDelete($asset);
+        $repository->delete($asset);
 
         return $this->success(
             [],
