@@ -24,6 +24,7 @@ class TransactionRepository extends BaseRepository
 
             $created = auth()->user()->transactions()->create([
                 'asset_id' => $assetId,
+                'description' => data_get($attributes, 'description'),
                 'date' => data_get($attributes, 'date'),
                 'type' => $type,
                 'value' => $value,
@@ -49,6 +50,7 @@ class TransactionRepository extends BaseRepository
             $newAssetValue = $transaction->asset_total_value;
 
             $updated = $transaction->update([
+                'description' => data_get($attributes, 'description') ?? $transaction->description,
                 'date' => data_get($attributes, 'date') ?? $transaction->date,
                 'type' => data_get($attributes, 'type') ?? $transaction->type,
                 'value' => $value ?? $transaction->value,
