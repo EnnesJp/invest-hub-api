@@ -16,6 +16,7 @@ class UserRepository extends BaseRepository
 
             $created = User::query()->create([
                 'name'  => data_get($attributes, 'name'),
+                'username' => data_get($attributes, 'username'),
                 'email' => data_get($attributes, 'email'),
                 'password' => Hash::make(data_get($attributes, 'password')),
             ]);
