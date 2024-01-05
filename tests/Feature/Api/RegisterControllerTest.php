@@ -19,6 +19,7 @@ class RegisterControllerTest extends TestCase
 
         $response = $this->postJson('api/register', [
             'name' => $this->faker->name(),
+            'username' => $this->faker->userName(),
             'email' => $this->faker->email(),
             'password' => $password,
             'confirmPassword' => $password,

@@ -18,6 +18,7 @@ class UserRepositoryTest extends TestCase
 
         $payload = [
             'name' => 'heyaa',
+            'username' => 'heyaa',
             'email' => 'abc@example.com',
             'password' => 'secret',
         ];
