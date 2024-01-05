@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\PortfolioController;
 use App\Http\Controllers\Api\AssetController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::post('register', RegisterController::class);
 Route::group(['middleware' => 'api.auth'], function () {
     Route::get('logout', [LoginController::class, 'logout']);
 
+    Route::apiResource('user', UserController::class);
     Route::apiResource('portfolios', PortfolioController::class);
     Route::apiResource('assets', AssetController::class);
     Route::apiResource('transactions', TransactionController::class);
