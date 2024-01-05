@@ -7,4 +7,6 @@ class TransactionConstants
     public const DESTROY = 'Transaction removed successfully.';
     public const STORE = 'Transaction created successfully.';
     public const UPDATE = 'Transaction updated successfully.';
+    public const CREDIT = 'credit';
+    public const DEBIT = 'debit';
 }

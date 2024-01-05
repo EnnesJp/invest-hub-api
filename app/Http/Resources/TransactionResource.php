@@ -14,10 +14,12 @@ class TransactionResource extends JsonResource
     */
     public function toArray($request): array
     {
+        $date = date_create($this->date);
+
         return [
             'id' => $this->id,
             'asset_id' => $this->asset_id,
-            'date' => $this->date,
+            'date' => date_format($date, "d/m/Y"),
             'type' => $this->type,
             'value' => floatval($this->value),
             'asset_total_value' => $this->asset_total_value,

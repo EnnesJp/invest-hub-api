@@ -28,18 +28,11 @@ class PortfolioController extends Controller
                         ->latest()
                         ->paginate($request->per_page ?? 20);
 
-        $meta = [
-            'page_size' => $portfolios->perPage(),
-            'current_page' => $portfolios->currentPage(),
-            'total_pages' => $portfolios->lastPage(),
-            'total_count' => $portfolios->total(),
-        ];
-
         return $this->success(
             PortfolioResource::collection($portfolios),
             null,
             Response::HTTP_OK,
-            $meta
+            $this->getMeta($portfolios)
         );
     }
 

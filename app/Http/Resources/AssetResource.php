@@ -13,12 +13,14 @@ class AssetResource extends JsonResource
     */
     public function toArray($request): array
     {
+        $acquisition_date = date_create($this->acquisition_date);
+
         return [
             'id' => $this->id,
             'portfolio_id' => $this->portfolio_id,
             'name' => $this->name,
             'value' => floatval($this->value),
-            'acquisition_date' => $this->acquisition_date,
+            'acquisition_date' => date_format($acquisition_date, "d/m/Y")
         ];
     }
 }
