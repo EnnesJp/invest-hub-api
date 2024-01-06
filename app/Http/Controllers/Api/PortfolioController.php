@@ -30,6 +30,7 @@ class PortfolioController extends Controller
 
         $meta = $this->getMeta($portfolios);
         $meta['total_balance'] = floatval(auth()->user()->portfolios()->sum('balance'));
+        $meta['total_tax'] = floatval(auth()->user()->assets()->sum('income_tax'));
 
         return $this->success(
             PortfolioResource::collection($portfolios),
