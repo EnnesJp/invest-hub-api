@@ -25,6 +25,15 @@ class AssetRepository extends BaseRepository
             ]);
             throw_if(!$created, GeneralJsonException::class, 'Failed to create asset. ');
 
+            (new TransactionRepository)->create([
+                'asset_id' => $created->id,
+                'description' => 'Creating Asset',
+                'date' => now(),
+                'type' => TransactionConstants::CREDIT,
+                'value' => $created->value,
+                'is_new_contribution' => false
+            ], false);
+
             $portfolio = auth()->user()->portfolios()->find($created->portfolio_id);
             $newBalance = $portfolio->balance + $created->value;
 

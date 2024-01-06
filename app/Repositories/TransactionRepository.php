@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionRepository extends BaseRepository
 {
-    public function create(array $attributes)
+    public function create(array $attributes, bool $updateAsset = true): mixed
     {
-        return DB::transaction(function () use ($attributes) {
+        return DB::transaction(function () use ($attributes, $updateAsset) {
             $type = data_get($attributes, 'type');
             $value = data_get($attributes, 'value');
             $assetId = data_get($attributes, 'asset_id');
@@ -28,14 +28,16 @@ class TransactionRepository extends BaseRepository
                 'date' => data_get($attributes, 'date'),
                 'type' => $type,
                 'value' => $value,
-                'asset_total_value' => $newAssetValue,
+                'asset_total_value' => $updateAsset ? $newAssetValue : $asset->value,
                 'is_new_contribution' => data_get($attributes, 'is_new_contribution') ?? true
             ]);
             throw_if(!$created, GeneralJsonException::class, 'Failed to create new Transaction.');
 
-            (new AssetRepository)->update($asset, [
-                'value' => $newAssetValue
-            ]);
+            if ($updateAsset) {
+                (new AssetRepository)->update($asset, [
+                    'value' => $newAssetValue
+                ]);
+            }
 
             return $created;
         });

@@ -24,7 +24,7 @@ class AssetResource extends JsonResource
             'acquisition_date' => date_format($acquisition_date, "d/m/Y"),
             'quantity' => $this->quantity,
             'liquidity_days' => $this->liquidity_days,
-            'liquidity_date' => date_format($liquidity_date, "d/m/Y"),
+            'liquidity_date' => $this->liquidity_date ? date_format($liquidity_date, "d/m/Y") : $this->liquidity_date,
             'income_tax' => floatval($this->income_tax),
         ];
     }
