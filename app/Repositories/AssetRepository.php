@@ -31,7 +31,7 @@ class AssetRepository extends BaseRepository
                 'date' => now(),
                 'type' => TransactionConstants::CREDIT,
                 'value' => $created->value,
-                'is_new_contribution' => false
+                'is_manual_movement' => false
             ], false);
 
             $portfolio = auth()->user()->portfolios()->find($created->portfolio_id);
@@ -69,8 +69,8 @@ class AssetRepository extends BaseRepository
                     'date' => now(),
                     'type' => $transactionType,
                     'value' => $transactionValue,
-                    'is_new_contribution' => false
-                ]);
+                    'is_manual_movement' => false
+                ], false);
             }
 
             $updated = $asset->update([
@@ -87,7 +87,7 @@ class AssetRepository extends BaseRepository
             if ($value) {
                 $portfolioId = $asset->portfolio_id;
                 $portfolio = auth()->user()->portfolios()->find($portfolioId);
-                $newBalance = $portfolio->balance - $oldValue + $value;
+                $newBalance = $portfolio->balance + ($value - $oldValue);
 
                 (new PortfolioRepository)->update($portfolio, [
                     'balance' => $newBalance
