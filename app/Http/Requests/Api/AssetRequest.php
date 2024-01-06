@@ -13,7 +13,7 @@ class AssetRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'user_id' => 'required|exists:users,id',
             'portfolio_id' => 'required|exists:portfolios,id',
             'name' => 'required|unique:assets|max:50',
@@ -24,5 +24,11 @@ class AssetRequest extends FormRequest
             'liquidity_date' => 'date|date_format:Y-m-d|nullable',
             'income_tax' => 'numeric|min:0.00',
         ];
+
+        if ($this->isMethod('PUT')) {
+            $rules['name'] = 'required|max:50|unique:assets,name,' . $this->route('asset')->id;
+        }
+
+        return $rules;
     }
 }
