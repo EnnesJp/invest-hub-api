@@ -28,11 +28,14 @@ class PortfolioController extends Controller
                         ->latest()
                         ->paginate($request->per_page ?? 20);
 
+        $meta = $this->getMeta($portfolios);
+        $meta['total_balance'] = floatval(auth()->user()->portfolios()->sum('balance'));
+
         return $this->success(
             PortfolioResource::collection($portfolios),
             null,
             Response::HTTP_OK,
-            $this->getMeta($portfolios)
+            $meta
         );
     }
 
