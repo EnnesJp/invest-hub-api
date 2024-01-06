@@ -28,7 +28,8 @@ class TransactionRepository extends BaseRepository
                 'date' => data_get($attributes, 'date'),
                 'type' => $type,
                 'value' => $value,
-                'asset_total_value' => $newAssetValue
+                'asset_total_value' => $newAssetValue,
+                'is_new_contribution' => data_get($attributes, 'is_new_contribution') ?? true
             ]);
             throw_if(!$created, GeneralJsonException::class, 'Failed to create new Transaction.');
 

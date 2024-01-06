@@ -19,7 +19,9 @@ class TransactionRequest extends FormRequest
             'description' => 'required|max:191',
             'date' => 'required|date|before:tomorrow|date_format:Y-m-d',
             'type' => 'required|in:debit,credit',
-            'value' => 'required|numeric|min:0.00'
+            'value' => 'required|numeric|min:0.00',
+            'asset_total_value' => 'required|numeric|min:0.00',
+            'is_manual_movement' => 'boolean'
         ];
     }
 }

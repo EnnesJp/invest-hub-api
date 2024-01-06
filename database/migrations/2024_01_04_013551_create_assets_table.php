@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('value', 8, 2);
             $table->date('acquisition_date')->nullable();
+            $table->decimal('quantity', 8, 2)->nullable();
+            $table->integer('liquidity_days')->nullable();
+            $table->date('liquidity_date')->nullable();
+            $table->decimal('income_tax', 8, 2);
             $table->timestamps();
         });
     }

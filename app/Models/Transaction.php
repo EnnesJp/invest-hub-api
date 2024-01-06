@@ -18,7 +18,8 @@ class Transaction extends Model
         'date',
         'type',
         'value',
-        'asset_total_value'
+        'asset_total_value',
+        'is_manual_movement'
     ];
 
     protected $casts = [

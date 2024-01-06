@@ -67,7 +67,7 @@ class AssetController extends Controller
             return $this->error([], AuthConstants::PERMISSION);
         }
 
-        $repository->update($asset, $request->all());
+        $repository->update($asset, $request->all(), true);
 
         return $this->success(
             new AssetResource($asset),

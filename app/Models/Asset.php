@@ -17,7 +17,11 @@ class Asset extends Model
         'portfolio_id',
         'name',
         'value',
-        'acquisition_date'
+        'acquisition_date',
+        'quantity',
+        'liquidity_days',
+        'liquidity_date',
+        'income_tax'
     ];
 
     protected $casts = [

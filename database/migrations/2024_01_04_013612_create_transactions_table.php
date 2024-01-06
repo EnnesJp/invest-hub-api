@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('type', ['debit', 'credit']);
             $table->decimal('value', 8, 2);
             $table->decimal('asset_total_value', 8, 2);
+            $table->boolean('is_manual_movement')->default(true);
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\GeneralJsonException;
 use App\Models\Asset;
 use App\Models\Transaction;
+use App\Constants\TransactionConstants;
 use Illuminate\Support\Facades\DB;
 
 class AssetRepository extends BaseRepository
@@ -17,6 +18,10 @@ class AssetRepository extends BaseRepository
                 'name' => data_get($attributes, 'name'),
                 'value' => data_get($attributes, 'value'),
                 'acquisition_date' => data_get($attributes, 'acquisition_date'),
+                'quantity' => data_get($attributes, 'quantity') ?? null,
+                'liquidity_days' => data_get($attributes, 'liquidity_days') ?? null,
+                'liquidity_date' => data_get($attributes, 'liquidity_date') ?? null,
+                'income_tax' => data_get($attributes, 'income_tax') ?? 0.00
             ]);
             throw_if(!$created, GeneralJsonException::class, 'Failed to create asset. ');
 
@@ -34,14 +39,38 @@ class AssetRepository extends BaseRepository
     /**
      * @param Asset $asset
      */
-    public function update($asset, array $attributes): mixed
-    {
-        return DB::transaction(function () use($asset, $attributes) {
+    public function update(
+        $asset,
+        array $attributes,
+        bool $createTransaction = false
+    ): mixed {
+        return DB::transaction(function () use($asset, $attributes, $createTransaction) {
             $value = data_get($attributes, 'value');
             $oldValue = $asset->value;
+
+            if ($createTransaction) {
+                $transactionValue = $value - $oldValue;
+                $transactionType = $transactionValue > 0
+                    ? TransactionConstants::CREDIT
+                    : TransactionConstants::DEBIT;
+
+                (new TransactionRepository)->create([
+                    'asset_id' => $asset->id,
+                    'description' => 'Update Asset',
+                    'date' => now(),
+                    'type' => $transactionType,
+                    'value' => $transactionValue,
+                    'is_new_contribution' => false
+                ]);
+            }
+
             $updated = $asset->update([
                 'name' => data_get($attributes, 'name') ?? $asset->name,
                 'value' => $value ?? $asset->value,
+                'quantity' => data_get($attributes, 'quantity') ?? $asset->quantity,
+                'liquidity_days' => data_get($attributes, 'liquidity_days') ?? $asset->liquidity_days,
+                'liquidity_date' => data_get($attributes, 'liquidity_date') ?? $asset->liquidity_date,
+                'income_tax' => data_get($attributes, 'income_tax') ?? $asset->income_tax,
             ]);
 
             throw_if(!$updated, GeneralJsonException::class, 'Failed to update asset');

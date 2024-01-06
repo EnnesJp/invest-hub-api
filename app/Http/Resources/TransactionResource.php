@@ -24,6 +24,7 @@ class TransactionResource extends JsonResource
             'type' => $this->type,
             'value' => floatval($this->value),
             'asset_total_value' => $this->asset_total_value,
+            'is_manual_movement' => $this->is_manual_movement,
         ];
     }
 }
