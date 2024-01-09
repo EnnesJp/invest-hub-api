@@ -28,11 +28,16 @@ class TransactionController extends Controller
                         ->latest()
                         ->paginate($request->per_page ?? 20);
 
+        $meta = $this->getMeta($transactions);
+        $meta['total'] = floatval(auth()->user()->transactions()->sum('value'));
+        $meta['total_credit'] = floatval(auth()->user()->transactions()->where('type', TransactionConstants::CREDIT)->sum('value'));
+        $meta['total_debit'] = floatval(auth()->user()->transactions()->where('type', TransactionConstants::DEBIT)->sum('value'));
+
         return $this->success(
             TransactionResource::collection($transactions),
             null,
             Response::HTTP_OK,
-            $this->getMeta($transactions)
+            $meta
         );
     }
 
