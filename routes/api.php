@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PortfolioController;
 use App\Http\Controllers\Api\AssetController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\SavingPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,5 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::apiResource('portfolios', PortfolioController::class);
     Route::apiResource('assets', AssetController::class);
     Route::apiResource('transactions', TransactionController::class);
+    Route::apiResource('saving-plans', SavingPlanController::class);
 });
