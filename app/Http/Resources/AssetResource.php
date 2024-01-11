@@ -19,6 +19,7 @@ class AssetResource extends JsonResource
         return [
             'id' => $this->id,
             'portfolio_id' => $this->portfolio_id,
+            'saving_plan_id' => $this->saving_plan_id,
             'name' => $this->name,
             'value' => floatval($this->value),
             'acquisition_date' => date_format($acquisition_date, "d/m/Y"),

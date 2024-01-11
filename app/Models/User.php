@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class, 'user_id', 'id');
     }
+
+    public function savingPlans(): HasMany
+    {
+        return $this->hasMany(SavingPlan::class, 'user_id', 'id');
+    }
 }

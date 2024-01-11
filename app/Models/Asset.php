@@ -15,6 +15,7 @@ class Asset extends Model
     protected $fillable = [
         'user_id',
         'portfolio_id',
+        'saving_plan_id',
         'name',
         'value',
         'acquisition_date',
@@ -43,6 +44,11 @@ class Asset extends Model
         return $this->hasMany(Transaction::class, 'asset_id', 'id');
     }
 
+    public function savingPlans(): BelongsTo
+    {
+        return $this->belongsTo(SavingPlan::class);
+    }
+
     public function scopeForUser(Builder $query): Builder
     {
         return $query->where('user_id', auth()->id());
@@ -51,5 +57,10 @@ class Asset extends Model
     public function scopeForPortfolio(Builder $query, $portfolioId): Builder
     {
         return $query->where('portfolio_id', $portfolioId);
+    }
+
+    public function scopeForSavingPlan(Builder $query, $savingPlanId): Builder
+    {
+        return $query->where('saving_plan_id', $savingPlanId);
     }
 }

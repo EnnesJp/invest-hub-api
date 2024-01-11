@@ -15,6 +15,7 @@ class AssetRepository extends BaseRepository
         return DB::transaction(function () use ($attributes) {
             $created = auth()->user()->assets()->create([
                 'portfolio_id' => data_get($attributes, 'portfolio_id'),
+                'saving_plan_id' => data_get($attributes, 'saving_plan_id'),
                 'name' => data_get($attributes, 'name'),
                 'value' => data_get($attributes, 'value'),
                 'acquisition_date' => data_get($attributes, 'acquisition_date'),
@@ -74,6 +75,8 @@ class AssetRepository extends BaseRepository
             }
 
             $updated = $asset->update([
+                'portfolio_id' => data_get($attributes, 'portfolio_id') ?? $asset->portfolio_id,
+                'saving_plan_id' => data_get($attributes, 'saving_plan_id') ?? $asset->saving_plan_id,
                 'name' => data_get($attributes, 'name') ?? $asset->name,
                 'value' => $value ?? $asset->value,
                 'quantity' => data_get($attributes, 'quantity') ?? $asset->quantity,
