@@ -27,7 +27,11 @@ class AssetRequest extends FormRequest
         ];
 
         if ($this->isMethod('PUT')) {
-            $rules['name'] = 'required|max:50|unique:assets,name,' . $this->route('asset')->id;
+            $rules['user_id'] = 'exists:users,id';
+            $rules['portfolio_id'] = 'exists:portfolios,id';
+            $rules['name'] = 'max:50|unique:assets,name,' . $this->route('asset')->id;
+            $rules['value'] = 'numeric|min:0.00';
+            $rules['acquisition_date'] = 'date|date_format:Y-m-d';
         }
 
         return $rules;
