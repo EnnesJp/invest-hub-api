@@ -16,6 +16,7 @@ class AssetRequest extends FormRequest
         $rules = [
             'user_id' => 'required|exists:users,id',
             'portfolio_id' => 'required|exists:portfolios,id',
+            'saving_plan_id' => 'exists:saving_plans,id|nullable',
             'name' => 'required|unique:assets|max:50',
             'value' => 'required|numeric|min:0.00',
             'acquisition_date' => 'required|date|date_format:Y-m-d',
