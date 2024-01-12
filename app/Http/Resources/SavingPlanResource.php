@@ -22,6 +22,7 @@ class SavingPlanResource extends JsonResource
             'description' => $this->description,
             'target_value' => floatval($this->target_value),
             'target_date' => date_format($target_date, "d/m/Y"),
+            'total_accumulated' => floatval($this->total_accumulated),
         ];
     }
 }
