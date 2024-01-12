@@ -28,6 +28,10 @@ class SavingPlanController extends Controller
                         ->latest()
                         ->paginate($request->per_page ?? 20);
 
+        foreach ($savingPlans as &$savingPlan) {
+            $savingPlan->total_accumulated = floatval(auth()->user()->assets()->where('saving_plan_id', $savingPlan->id)->sum('value'));
+        }
+
         return $this->success(
             SavingPlanResource::collection($savingPlans),
             null,
