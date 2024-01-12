@@ -58,7 +58,7 @@ class AssetRepository extends BaseRepository
             $value = data_get($attributes, 'value');
             $oldValue = $asset->value;
 
-            if ($createTransaction) {
+            if ($createTransaction && $value) {
                 $transactionValue = $value - $oldValue;
                 $transactionType = $transactionValue > 0
                     ? TransactionConstants::CREDIT
