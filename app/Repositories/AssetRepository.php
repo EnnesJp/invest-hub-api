@@ -54,7 +54,7 @@ class AssetRepository extends BaseRepository
         array $attributes,
         bool $createTransaction = false
     ): mixed {
-        return DB::transaction(function () use($asset, $attributes, $createTransaction) {
+        return DB::transaction(function () use ($asset, $attributes, $createTransaction) {
             $value = data_get($attributes, 'value');
             $oldValue = $asset->value;
 
@@ -71,7 +71,7 @@ class AssetRepository extends BaseRepository
                     'type' => $transactionType,
                     'value' => $transactionValue,
                     'is_manual_movement' => false
-                ], false);
+                ]);
             }
 
             $updated = $asset->update([
@@ -106,7 +106,7 @@ class AssetRepository extends BaseRepository
      */
     public function delete($asset, bool $cascade = false): mixed
     {
-        return DB::transaction(function () use($asset, $cascade) {
+        return DB::transaction(function () use ($asset, $cascade) {
             if (!$cascade) {
                 $portfolioId = $asset->portfolio_id;
                 $portfolio = auth()->user()->portfolios()->find($portfolioId);
@@ -128,7 +128,7 @@ class AssetRepository extends BaseRepository
 
     public function removeTransactions(Asset $asset): void
     {
-        $asset->transactions->each(function (Transaction $transaction){
+        $asset->transactions->each(function (Transaction $transaction) {
             (new TransactionRepository)->delete($transaction, true);
         });
     }
