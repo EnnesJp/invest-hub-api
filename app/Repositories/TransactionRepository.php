@@ -48,7 +48,7 @@ class TransactionRepository extends BaseRepository
      */
     public function update($transaction, array $attributes): mixed
     {
-        return DB::transaction(function () use($transaction, $attributes) {
+        return DB::transaction(function () use ($transaction, $attributes) {
             $value = data_get($attributes, 'value');
             $newAssetValue = $transaction->asset_total_value;
 
@@ -107,7 +107,7 @@ class TransactionRepository extends BaseRepository
      */
     public function delete($transaction, bool $cascade = false): mixed
     {
-        return DB::transaction(function () use($transaction, $cascade) {
+        return DB::transaction(function () use ($transaction, $cascade) {
             if (!$cascade) {
                 $assetId = $transaction->asset_id;
                 $asset = auth()->user()->assets()->find($assetId);
