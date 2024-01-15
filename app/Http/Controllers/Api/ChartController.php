@@ -24,6 +24,7 @@ class ChartController extends Controller
             ->selectRaw('date as month, sum(asset_total_value) as total')
             ->where('date', '>=', $lastYear . '-' . $month . '-01')
             ->groupBy('month')
+            ->orderBy('month')
             ->get();
 
         return $this->success(
