@@ -7,6 +7,7 @@ use App\Http\Resources\AssetChartResource;
 use App\Http\Traits\Access;
 use App\Http\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ChartController extends Controller
 {
@@ -20,18 +21,15 @@ class ChartController extends Controller
         $assets = auth()
             ->user()
             ->transactions()
-            ->selectRaw('asset_id, date as month, asset_total_value')
+            ->selectRaw('date as month, sum(asset_total_value) as total')
             ->where('date', '>=', $lastYear . '-' . $month . '-01')
+            ->groupBy('month')
             ->get();
 
-        $chartData = [];
-        foreach ($assets as $asset) {
-            $asset->month = date('m/Y', strtotime($asset->month));
-            $chartData[$asset->asset_id][] = $asset;
-        }
-
         return $this->success(
-            $chartData,
+            AssetChartResource::collection($assets),
+            null,
+            Response::HTTP_OK
         );
     }
 }
