@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AssetController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SavingPlanController;
+use App\Http\Controllers\Api\ChartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,6 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::apiResource('assets', AssetController::class);
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('saving-plans', SavingPlanController::class);
+
+    Route::get('charts/total-month', [ChartController::class, 'getTotalAssetsGroupedByType']);
 });

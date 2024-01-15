@@ -23,10 +23,10 @@ class AssetController extends Controller
     public function index(Request $request): JsonResponse
     {
         $assets = auth()
-                    ->user()
-                    ->assets()
-                    ->latest()
-                    ->paginate($request->per_page ?? 20);
+            ->user()
+            ->assets()
+            ->latest()
+            ->paginate($request->per_page ?? 20);
 
         return $this->success(
             AssetResource::collection($assets),
