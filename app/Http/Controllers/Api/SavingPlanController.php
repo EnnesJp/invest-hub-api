@@ -7,6 +7,7 @@ use App\Http\Traits\HttpResponses;
 use App\Http\Controllers\Controller;
 use App\Constants\AuthConstants;
 use App\Http\Resources\SavingPlanResource;
+use App\Http\Resources\SelectResource;
 use App\Constants\SavingPlanConstants;
 use App\Http\Requests\Api\SavingPlanRequest;
 use App\Models\SavingPlan;
@@ -23,10 +24,10 @@ class SavingPlanController extends Controller
     public function index(Request $request): JsonResponse
     {
         $savingPlans = auth()
-                        ->user()
-                        ->savingPlans()
-                        ->latest()
-                        ->paginate($request->per_page ?? 20);
+            ->user()
+            ->savingPlans()
+            ->latest()
+            ->paginate($request->per_page ?? 20);
 
         foreach ($savingPlans as &$savingPlan) {
             $savingPlan->total_accumulated = floatval(auth()->user()->assets()->where('saving_plan_id', $savingPlan->id)->sum('value'));
@@ -91,5 +92,20 @@ class SavingPlanController extends Controller
         $repository->delete($savingPlan);
 
         return $this->success([], SavingPlanConstants::DESTROY);
+    }
+
+    public function getSavingPlanSelect(): JsonResponse
+    {
+        $assets = auth()
+            ->user()
+            ->savingPlans()
+            ->selectRaw('id as value, name as label')
+            ->get();
+
+        return $this->success(
+            SelectResource::collection($assets),
+            null,
+            Response::HTTP_OK
+        );
     }
 }

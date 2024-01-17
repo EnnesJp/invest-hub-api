@@ -7,6 +7,7 @@ use App\Constants\PortfolioConstants;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PortfolioRequest;
 use App\Http\Resources\PortfolioResource;
+use App\Http\Resources\SelectResource;
 use App\Http\Traits\Access;
 use App\Http\Traits\HttpResponses;
 use App\Models\Portfolio;
@@ -23,10 +24,10 @@ class PortfolioController extends Controller
     public function index(Request $request): JsonResponse
     {
         $portfolios = auth()
-                        ->user()
-                        ->portfolios()
-                        ->latest()
-                        ->paginate($request->per_page ?? 20);
+            ->user()
+            ->portfolios()
+            ->latest()
+            ->paginate($request->per_page ?? 20);
 
         $meta = $this->getMeta($portfolios);
         $meta['total_balance'] = floatval(auth()->user()->portfolios()->sum('balance'));
@@ -91,5 +92,20 @@ class PortfolioController extends Controller
         $repository->delete($portfolio);
 
         return $this->success([], PortfolioConstants::DESTROY);
+    }
+
+    public function getPortfolioSelect(): JsonResponse
+    {
+        $assets = auth()
+            ->user()
+            ->portfolios()
+            ->selectRaw('id as value, name as label')
+            ->get();
+
+        return $this->success(
+            SelectResource::collection($assets),
+            null,
+            Response::HTTP_OK
+        );
     }
 }
