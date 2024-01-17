@@ -29,6 +29,7 @@ Route::group(['middleware' => 'api.auth'], function () {
 
     Route::apiResource('user', UserController::class);
     Route::apiResource('portfolios', PortfolioController::class);
+    Route::get('assets/select', [AssetController::class, 'getAssetSelect']);
     Route::apiResource('assets', AssetController::class);
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('saving-plans', SavingPlanController::class);

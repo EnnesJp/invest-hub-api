@@ -9,6 +9,7 @@ use App\Http\Traits\Access;
 use App\Http\Traits\HttpResponses;
 use App\Http\Requests\Api\AssetRequest;
 use App\Http\Resources\AssetResource;
+use App\Http\Resources\SelectResource;
 use App\Models\Asset;
 use App\Repositories\AssetRepository;
 use Illuminate\Http\Request;
@@ -88,6 +89,21 @@ class AssetController extends Controller
         return $this->success(
             [],
             AssetConstants::DESTROY
+        );
+    }
+
+    public function getAssetSelect(): JsonResponse
+    {
+        $assets = auth()
+            ->user()
+            ->assets()
+            ->selectRaw('id as value, name as label')
+            ->get();
+
+        return $this->success(
+            SelectResource::collection($assets),
+            null,
+            Response::HTTP_OK
         );
     }
 }
