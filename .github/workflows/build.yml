@@ -21,6 +21,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   laravel-tests:
+    needs: [sonarqube]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
