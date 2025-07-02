@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\API\Auth;
 
 use App\Constants\AuthConstants;
@@ -16,16 +18,15 @@ class RegisterController extends Controller
 {
     use HttpResponses;
 
+    public function __construct(
+        protected readonly UserService $service
+    ) {
+    }
+
     public function __invoke(RegisterRequest $request): JsonResponse
     {
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] = $user->createToken('MyApp')->plainTextToken;
-        $success['user'] = new UserResource($user);
+        $response = $this->service->create($request->validated());
 
-        event(new UserRegistered($user));
-
-        return $this->success($success, AuthConstants::REGISTER, Response::HTTP_CREATED);
+        return $this->success($response, AuthConstants::REGISTER, Response::HTTP_CREATED);
     }
 }

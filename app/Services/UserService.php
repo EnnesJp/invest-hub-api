@@ -19,9 +19,17 @@ class UserService
         return $this->repository->all($pageSize);
     }
 
-    public function create(array $attributes): User
+    public function create(array $attributes): array
     {
-        return $this->repository->create($attributes);
+        $attributes['password'] = bcrypt($attributes['password']);
+        $user = $this->repository->create($attributes);
+
+        event(new UserRegistered($user));
+
+        return [
+            'token' => $user->createToken('MyApp')->plainTextToken,
+            'user' => new UserResource($user),
+        ];
     }
 
     public function update(User $user, array $attributes): User
