@@ -38,7 +38,12 @@ class UserRepository extends BaseRepository
         });
     }
 
-    public function update(User $user, array $attributes): mixed
+    /**
+     * Updates a user.
+     *
+     * @param User $user The user to update
+     */
+    public function update($user, array $attributes): mixed
     {
         return DB::transaction(function () use ($user, $attributes) {
             $updated = $user->update([
@@ -52,7 +57,12 @@ class UserRepository extends BaseRepository
         });
     }
 
-    public function delete(User $user, bool $force = false): mixed
+    /**
+     * Deletes a user.
+     *
+     * @param User $user The user to delete
+     */
+    public function delete($user, bool $force = false): mixed
     {
         return DB::transaction(function () use ($user) {
             $deleted = $user->forceDelete();

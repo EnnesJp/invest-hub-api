@@ -6,6 +6,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Events\UserRegistered;
+use App\Http\Resources\UserResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserService

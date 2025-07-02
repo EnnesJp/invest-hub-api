@@ -11,6 +11,7 @@ use App\Http\Requests\Api\RegisterRequest;
 use App\Http\Traits\HttpResponses;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
