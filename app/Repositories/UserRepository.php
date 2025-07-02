@@ -1,20 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
 use App\Exceptions\GeneralJsonException;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepository extends BaseRepository
 {
+    public function __construct(
+        protected readonly User $model
+    ) {
+    }
+
+    public function all(int $pageSize): LengthAwarePaginator
+    {
+        return $this->model->query()->paginate($pageSize ?? 5);
+    }
 
     public function create(array $attributes): mixed
     {
         return DB::transaction(function () use ($attributes) {
 
-            $created = User::query()->create([
+            $created = $this->model->query()->create([
                 'name'  => data_get($attributes, 'name'),
                 'username' => data_get($attributes, 'username'),
                 'email' => data_get($attributes, 'email'),
@@ -26,10 +38,7 @@ class UserRepository extends BaseRepository
         });
     }
 
-    /**
-     * @param User $user
-     */
-    public function update($user, array $attributes): mixed
+    public function update(User $user, array $attributes): mixed
     {
         return DB::transaction(function () use ($user, $attributes) {
             $updated = $user->update([
@@ -43,10 +52,7 @@ class UserRepository extends BaseRepository
         });
     }
 
-    /**
-     * @param User $user
-     */
-    public function delete($user, bool $force = false): mixed
+    public function delete(User $user, bool $force = false): mixed
     {
         return DB::transaction(function () use ($user) {
             $deleted = $user->forceDelete();

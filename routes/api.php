@@ -28,13 +28,17 @@ Route::group(['middleware' => 'api.auth'], function () {
     Route::get('logout', [LoginController::class, 'logout']);
 
     Route::apiResource('user', UserController::class);
-    Route::get('portfolios/select', [PortfolioController::class, 'getPortfolioSelect']);
+    
     Route::apiResource('portfolios', PortfolioController::class);
-    Route::get('assets/select', [AssetController::class, 'getAssetSelect']);
+    Route::get('portfolios/select', [PortfolioController::class, 'getPortfolioSelect']);
+    
     Route::apiResource('assets', AssetController::class);
+    Route::get('assets/select', [AssetController::class, 'getAssetSelect']);
+    
     Route::apiResource('transactions', TransactionController::class);
-    Route::get('saving-plans/select', [SavingPlanController::class, 'getSavingPlanSelect']);
+    
     Route::apiResource('saving-plans', SavingPlanController::class);
+    Route::get('saving-plans/select', [SavingPlanController::class, 'getSavingPlanSelect']);
 
     Route::get('charts/total-month', [ChartController::class, 'getTotalAssetsGroupedByType']);
 });
